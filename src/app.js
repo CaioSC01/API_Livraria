@@ -1,5 +1,5 @@
 import express from "express";
-import db from "./Config/dbConnect";
+import db from "./Config/dbConnect.js";
 
 db.on("error", console.log.bind(console, "Erro de conexão"));
 db.once("open", () => {
