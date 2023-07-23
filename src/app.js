@@ -11,17 +11,6 @@ const app = express();
 
 app.use(express.json());
 
-// const livros = [
-//   { id: 1, titulo: "Senhor dos Aneis" },
-//   { id: 2, titulo: "O Hobbit" },
-// ];
-
-app.get("/livros", (req, res) => {
-  livros.find((err, livros) => {
-    res.status(200).json(livros);
-  });
-});
-
 app.get("/livros/:id", (req, res) => {
   let index = buscaLivro(req.params.id);
   res.json(livros[index]);
