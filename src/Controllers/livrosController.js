@@ -7,7 +7,7 @@ class LivroController {
     });
   };
 
-  static criarLivros = (req, res) => {
+  static cadastrarLivros = (req, res) => {
     let livro = new livros(req.body);
 
     livro.save((err) => {
