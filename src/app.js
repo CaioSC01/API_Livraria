@@ -1,6 +1,7 @@
 import express from "express";
 import db from "./Config/dbConnect.js";
 import livros from "./Models/Livros.js";
+import routes from "./routes/index.js";
 
 db.on("error", console.log.bind(console, "Erro de conexão"));
 db.once("open", () => {
@@ -8,6 +9,8 @@ db.once("open", () => {
 });
 
 const app = express();
+
+routes(app)
 
 app.use(express.json());
 
