@@ -14,9 +14,9 @@ class LivroController {
       if (err) {
         req
           .status(500)
-          .send({ message: `${err.message}- falaha ao cadastrar livro.` });
+          .send({ message: `${err.message} - falaha ao cadastrar livro.` });
       } else {
-        res.status(201).send(livro.toJson());
+        res.status(201).send(livro.toJSON());
       }
     });
   };
