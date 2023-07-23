@@ -1,5 +1,5 @@
 import express from "express";
-import LivroController from "../Controllers/livrosController";
+import LivroController from "../Controllers/livrosController.js";
 
 const router = express.Router();
 
