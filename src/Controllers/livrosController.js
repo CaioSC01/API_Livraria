@@ -1,76 +1,84 @@
 import livros from "../Models/Livros.js";
 
 class LivroController {
-    static listarLivros = (req, res) => {
-        livros
-            .find()
-            .populate("autor")
-            .exec((err, livros) => {
-                res.status(200).json(livros);
+    static listarLivros = async (req, res) => {
+        try {
+            const livrosResultado = await livros
+                .find()
+                .populate("autor")
+                .exec();
+
+            res.status(200).json(livrosResultado);
+        } catch (erro) {
+            res.status(500).json({ message: "Erro interno no servidor" });
+        }
+    };
+
+    static listarLivroPorId = async (req, res) => {
+        try {
+            const id = req.params.id;
+
+            const livroResultados = await livros
+                .findById(id)
+                .populate("autor", "nome")
+                .exec();
+
+            res.status(200).send(livroResultados);
+        } catch (erro) {
+            res.status(400).send({
+                message: `${erro.message} - Id do livro não localizado.`,
             });
+        }
     };
 
-    static listarLivroPorId = (req, res) => {
-        const id = req.params.id;
+    static cadastrarLivros = async (req, res) => {
+        try {
+            let livro = new livros(req.body);
 
-        livros
-            .findById(id)
-            .populate("autor", "nome")
-            .exec((err, livros) => {
-                if (err) {
-                    res
-                        .status(400)
-                        .send({ message: `${err.message} - Id do livro não localizado.` });
-                } else {
-                    res.status(200).send(livros);
-                }
+            const livroResultado = await livro.save();
+
+            res.status(201).send(livroResultado.toJSON());
+        } catch (erro) {
+            res.status(500).send({
+                message: `${erro.message} - falha ao cadastrar livro.`,
             });
+        }
     };
 
-    static cadastrarLivros = (req, res) => {
-        let livro = new livros(req.body);
+    static atualizarLivros = async (req, res) => {
+        try {
+            const id = req.params.id;
 
-        livro.save((err) => {
-            if (err) {
-                req
-                    .status(500)
-                    .send({ message: `${err.message} - falaha ao cadastrar livro.` });
-            } else {
-                res.status(201).send(livro.toJSON());
-            }
-        });
+            await livros.findByIdAndUpdate(id, { $set: req.body });
+
+            res.status(200).send({ message: "Livro atualizado com sucesso" });
+        } catch (erro) {
+            res.status(500).send({ message: erro.message });
+        }
     };
 
-    static atualizarLivros = (req, res) => {
-        const id = req.params.id;
+    static excluirLivro = async (req, res) => {
+        try {
+            const id = req.params.id;
 
-        livros.findByIdAndUpdate(id, { $set: req.body }, (err) => {
-            if (!err) {
-                res.status(200).send({ message: "livro au=tualixado com sucesso" });
-            } else {
-                res.status(500).send({ message: err.message });
-            }
-        });
+            await livros.findByIdAndDelete(id);
+
+            res.status(200).send({ message: "Livro removido com sucesso" });
+        } catch (erro) {
+            res.status(500).send({ message: erro.message });
+        }
     };
 
-    static excluirLivro = (req, res) => {
-        const id = req.params.id;
+    static listarLivroPorEditora = async (req, res) => {
+        try {
+            const editora = req.query.editora;
 
-        livros.findByIdAndDelete(id, (err) => {
-            if (!err) {
-                res.status(200).send({ message: "Livro removido com sucesso" });
-            } else {
-                res.status(500).send({ message: err.message });
-            }
-        });
-    };
+            const livrosResultado = await livros.find({ editora: editora });
 
-    static listarLivroPorEditora = (req, res) => {
-        const editora = req.query.editora;
-
-        livros.find({ editora: editora }, {}, (err, livros) => {
-            res.status(200).send(livros);
-        });
+            res.status(200).send(livrosResultado);
+        } catch (erro) {
+            res.status(500).json({ message: "Erro interno no servidor" });
+        }
     };
 }
 
