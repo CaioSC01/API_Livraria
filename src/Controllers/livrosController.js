@@ -1,4 +1,5 @@
-import livros from "../Models/Livros.js";
+// import NaoEncontrado from "../Erros/NaoEncontrado.js";
+import { livros } from "../Models/index.js";
 
 class LivroController {
     static listarLivros = async (req, res, next) => {

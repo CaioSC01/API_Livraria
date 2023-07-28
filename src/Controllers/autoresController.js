@@ -1,5 +1,5 @@
 import NaoEncontrado from "../Erros/NaoEncontrado.js";
-import autores from "../Models/Autor.js";
+import { autores } from "../Models/index.js";
 
 class AutorController {
     static listarAutores = async (req, res, next) => {
